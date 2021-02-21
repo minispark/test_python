@@ -10,7 +10,7 @@ shop_headers = {
 }
 
 print("프로그램 시작!!!")
-
+print(shop_headers)
 res = requests.get(shop_api_url, headers=shop_headers)
 
 print("응답코드 ::" + str(res.status_code))
