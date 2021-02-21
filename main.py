@@ -39,13 +39,13 @@ def check_stock():
             stock = avail["inStock"]
 
             if stock:
-                message = shop_view_url + "\n\n *** 재고있음!빨리빨리@ ***"
+                message = "*** 재고있음!빨리빨리@ ***\n\n" + shop_view_url
                 bot.sendMessage(chat_id="1427660579", text=message)
                 requests.get(chat_channel_url)
                 params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
                 requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
             else:
-                message = shop_view_url + "\n\n *** 재고없음 ***"
+                message = "*** 재고없음 ***"
                 bot.sendMessage(chat_id="1427660579", text=message)
                 params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
                 requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
