@@ -6,7 +6,7 @@ import requests
 shop_api_url = "https://kr.louisvuitton.com/kor-kr/homepage"
 shop_headers = {
     'accept': 'application/json, text/plain, */*',
-    'user-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0',
+    'user-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1',
     'cookie': '_abck=31AB0C9A430DA422B3E1CBF57980642A~0~YAAQfHpGaL+DKq93AQAAJDEHwAVsqgc4L1HI41smpGPLU73umxqsHd8B4I3cOaZpXjW9JTfPMTw8Td8cDN+kpOpvhpvBlu6+mDMl1wCb6Sv2aYxhRf+rwELoVDfNWsbRimngamL/BIMJ3C8KiPxH6WVYe1w7h5FFU4YFzfXO9hwoVhi819bjsGs3UYtDEWXRLEyXwa5jcMlW6YKCjOduMrlH21pR4L62UcdLVF0CWK7UYXZ9FpCy75RiauxIySVACa/4AGHQYUmpYUCk4Usd7Ce8khHmIYabPpvKgAyeq6m/uWq//qoDxvn5CIYjVsoDf6w0IXAQnJawSCRfcF5TdS8hS2SjdTm5RhutyA==~-1~-1~-1'
 }
 
