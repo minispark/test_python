@@ -15,32 +15,21 @@ shop_headers = {
     'cookie': '_abck=31AB0C9A430DA422B3E1CBF57980642A~0~YAAQfHpGaL+DKq93AQAAJDEHwAVsqgc4L1HI41smpGPLU73umxqsHd8B4I3cOaZpXjW9JTfPMTw8Td8cDN+kpOpvhpvBlu6+mDMl1wCb6Sv2aYxhRf+rwELoVDfNWsbRimngamL/BIMJ3C8KiPxH6WVYe1w7h5FFU4YFzfXO9hwoVhi819bjsGs3UYtDEWXRLEyXwa5jcMlW6YKCjOduMrlH21pR4L62UcdLVF0CWK7UYXZ9FpCy75RiauxIySVACa/4AGHQYUmpYUCk4Usd7Ce8khHmIYabPpvKgAyeq6m/uWq//qoDxvn5CIYjVsoDf6w0IXAQnJawSCRfcF5TdS8hS2SjdTm5RhutyA==~-1~-1~-1'
 }
 
+res = requests.get(shop_api_url, headers=shop_headers)
 
-def check_stock():
-    try:
-        res = requests.get(shop_api_url, headers=shop_headers)
-    except Exception as ex:
-        print("호출 오류발생!!" + ex)
+if res.status_code == 200:
+    data = res.json()
+    avail = data["skuAvailability"][0]
+    stock = avail["inStock"]
+
+    if stock:
+        message = shop_view_url + "\n\n *** 재고있음!빨리빨리@ ***"
+        requests.get(chat_channel_url)
+        params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
+        requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
     else:
-        if res.status_code == 200:
-            data = res.json()
-            avail = data["skuAvailability"][0]
-            stock = avail["inStock"]
+        message = shop_view_url + "\n\n *** 재고없음 ***"
+        params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
+        requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
 
-            if stock:
-                message = shop_view_url + "\n\n *** 재고있음!빨리빨리@ ***"
-                requests.get(chat_channel_url)
-                params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
-                requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
-            else:
-                message = shop_view_url + "\n\n *** 재고없음 ***"
-                params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
-                requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
-
-
-print("프로그램 시작!!")
-
-check_stock()
-
-print("프로그램 종료!!")
 
