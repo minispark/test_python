@@ -2,7 +2,7 @@ import requests
 
 # Shop Setting
 #shop_api_url = "https://api.louisvuitton.com/api/kor-kr/catalog/availability/010575"
-shop_api_url = "https://www.naver.com"
+shop_api_url = "https://kr.louisvuitton.com/kor-kr/homepage"
 shop_headers = {
     'accept': 'application/json, text/plain, */*',
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
