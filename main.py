@@ -1,19 +1,54 @@
 import requests
+import telegram
 
-#'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
+# Telegram setting
+chat_id_bot = "1427660579"
+chat_private_id = "-1001171474630"
+chat_token = "1606450812:AAGrTv7Eeb1Q9iJEhycSJuuFE7E7Ow_XGGQ"
+bot = telegram.Bot(token=chat_token)
+chat_channel_url = "https://api.telegram.org/bot1606450812:AAGrTv7Eeb1Q9iJEhycSJuuFE7E7Ow_XGGQ/sendMessage"
+chat_channel_Headers = {"Content-type": "application/json"}
+
 # Shop Setting
-#shop_api_url = "https://api.louisvuitton.com/api/kor-kr/catalog/availability/010575"
-shop_api_url = "https://kr.louisvuitton.com/kor-kr/homepage"
+shop_api_url = "https://api.louisvuitton.com/api/kor-kr/catalog/availability/010575"
+shop_view_url = "https://kr.louisvuitton.com/kor-kr/products/nano-speedy-monogram-010575"
 shop_headers = {
     'accept': 'application/json, text/plain, */*',
-    'user-agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:15.0) Gecko/20100101 Firefox/15.0.1',
-    'cookie': '_abck=31AB0C9A430DA422B3E1CBF57980642A~0~YAAQfHpGaL+DKq93AQAAJDEHwAVsqgc4L1HI41smpGPLU73umxqsHd8B4I3cOaZpXjW9JTfPMTw8Td8cDN+kpOpvhpvBlu6+mDMl1wCb6Sv2aYxhRf+rwELoVDfNWsbRimngamL/BIMJ3C8KiPxH6WVYe1w7h5FFU4YFzfXO9hwoVhi819bjsGs3UYtDEWXRLEyXwa5jcMlW6YKCjOduMrlH21pR4L62UcdLVF0CWK7UYXZ9FpCy75RiauxIySVACa/4AGHQYUmpYUCk4Usd7Ce8khHmIYabPpvKgAyeq6m/uWq//qoDxvn5CIYjVsoDf6w0IXAQnJawSCRfcF5TdS8hS2SjdTm5RhutyA==~-1~-1~-1'
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36',
+    'cookie': '_abck=31AB0C9A430DA422B3E1CBF57980642A~0~YAAQfHpGaL+DKq93AQAAJDEHwAVsqgc4L1HI41smpGPLU73umxqsHd8B4I3cOaZpXjW9JTfPMTw8Td8cDN+kpOpvhpvBlu6+mDMl1wCb6Sv2aYxhRf+rwELoVDfNWsbRimngamL/BIMJ3C8KiPxH6WVYe1w7h5FFU4YFzfXO9hwoVhi819bjsGs3UYtDEWXRLEyXwa5jcMlW6YKCjOduMrlH21pR4L62UcdLVF0CWK7UYXZ9FpCy75RiauxIySVACa/4AGHQYUmpYUCk4Usd7Ce8khHmIYabPpvKgAyeq6m/uWq//qoDxvn5CIYjVsoDf6w0IXAQnJawSCRfcF5TdS8hS2SjdTm5RhutyA==~-1~-1~-1',
+    'referer': 'https://kr.louisvuitton.com/kor-kr/women/handbags/mini-bags/_/N-1ou97wg?page=3',
+    'origin': 'https://kr.louisvuitton.com'
 }
 
-print("프로그램 시작!!!")
-print(shop_headers)
-res = requests.get(shop_api_url, headers=shop_headers)
+default_url = "https://kr.louisvuitton.com/kor-kr/homepage"
+default_headers = {
+    'accept': 'application/json, text/plain, */*',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
+}
 
-print("응답코드 ::" + str(res.status_code))
 
-print("프로그램 종료!!!")
+def check_stock():
+    try:
+        res = requests.get(shop_api_url, headers=shop_headers)
+    except Exception as ex:
+        print("호출 오류발생!!" + ex)
+    else:
+        if res.status_code == 200:
+            data = res.json()
+            avail = data["skuAvailability"][0]
+            stock = avail["inStock"]
+
+            if stock:
+                message = shop_view_url + "\n\n *** 재고있음!빨리빨리@ ***"
+                bot.sendMessage(chat_id="1427660579", text=message)
+                requests.get(chat_channel_url)
+                params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
+                requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
+            else:
+                message = shop_view_url + "\n\n *** 재고없음 ***"
+                bot.sendMessage(chat_id="1427660579", text=message)
+                params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
+                requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
+
+
+check_stock()
