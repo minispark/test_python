@@ -27,28 +27,31 @@ default_headers = {
 }
 
 
-def check_stock():
-    try:
-        res = requests.get(shop_api_url, headers=shop_headers)
-    except Exception as ex:
-        print("호출 오류발생!!" + ex)
-    else:
-        if res.status_code == 200:
-            data = res.json()
-            avail = data["skuAvailability"][0]
-            stock = avail["inStock"]
+class Stock:
+    def check_stock(self):
+        try:
+            res = requests.get(shop_api_url, headers=shop_headers, timeout=5)
 
-            if stock:
-                message = "*** 재고있음!빨리빨리@ ***\n\n" + shop_view_url
-                bot.sendMessage(chat_id="1427660579", text=message)
-                requests.get(chat_channel_url)
-                params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
-                requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
-            else:
-                message = "*** 재고없음 ***"
-                bot.sendMessage(chat_id="1427660579", text=message)
-                params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
-                requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
+            if res.status_code == 200:
+                data = res.json()
+                avail = data["skuAvailability"][0]
+                stock = avail["inStock"]
+
+                if stock:
+                    message = "*** 재고있음!빨리빨리@ ***\n\n" + shop_view_url
+                    bot.sendMessage(chat_id=chat_id_bot, text=message)
+                    requests.get(chat_channel_url)
+                    params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
+                    requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
+                else:
+                    message = "*** 재고없음 ***"
+                    bot.sendMessage(chat_id=chat_id_bot, text=message)
+                    params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
+                    requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
+                    return message
+        except Exception as ex:
+            return ex
 
 
-check_stock()
+m = Stock()
+m.check_stock()
