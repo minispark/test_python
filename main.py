@@ -31,6 +31,7 @@ class Stock:
     def check_stock(self):
         try:
             res = requests.get(shop_api_url, headers=shop_headers, timeout=5)
+            print(res.status_code)
 
             if res.status_code == 200:
                 data = res.json()
@@ -39,16 +40,13 @@ class Stock:
 
                 if stock:
                     message = "*** 재고있음!빨리빨리@ ***\n\n" + shop_view_url
-                    bot.sendMessage(chat_id=chat_id_bot, text=message)
                     requests.get(chat_channel_url)
                     params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
                     requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
                 else:
                     message = "*** 재고없음 ***"
-                    bot.sendMessage(chat_id=chat_id_bot, text=message)
-                    params = '{"chat_id": "%s", "text": "%s"}' % (chat_private_id, message)
-                    requests.post(chat_channel_url, headers=chat_channel_Headers, data=params.encode("UTF-8"))
-                    return message
+
+                return message
         except Exception as ex:
             return ex
 
