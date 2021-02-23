@@ -1,5 +1,6 @@
 import requests
 import telegram
+import datetime
 
 # Telegram setting
 chat_id_bot = "1427660579"
@@ -26,12 +27,16 @@ default_headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
 }
 
+now = datetime.datetime.now()
+nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
+
 
 class Stock:
     def check_stock(self):
         try:
             res = requests.get(shop_api_url, headers=shop_headers, timeout=5)
-            print(res.status_code)
+
+            print(nowDatetime + "status ::" + res.status_code)
 
             if res.status_code == 200:
                 data = res.json()
@@ -46,8 +51,12 @@ class Stock:
                 else:
                     message = "*** 재고없음 ***"
 
+                print(nowDatetime)
+                print(message)
                 return message
         except Exception as ex:
+            print(nowDatetime)
+            print(ex)
             return ex
 
 
