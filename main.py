@@ -36,8 +36,6 @@ class Stock:
         try:
             res = requests.get(shop_api_url, headers=shop_headers, timeout=5)
 
-            print(nowDatetime + "status ::" + res.status_code)
-
             if res.status_code == 200:
                 data = res.json()
                 avail = data["skuAvailability"][0]
