@@ -1,6 +1,7 @@
 import requests
 import telegram
 import datetime
+import time
 
 # Telegram setting
 chat_id_bot = "1427660579"
@@ -35,6 +36,7 @@ class Stock:
     def check_stock(self):
         try:
             res = requests.get(shop_api_url, headers=shop_headers, timeout=5)
+            time.sleep(3)
 
             if res.status_code == 200:
                 data = res.json()
